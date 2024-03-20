@@ -16,7 +16,7 @@ const MatchCard = props => {
     if (matchStatus === 'Won') {
       return 'match-won'
     }
-    return 'match-loss'
+    return 'match-lost'
   }
 
   return (
@@ -28,7 +28,7 @@ const MatchCard = props => {
       />
       <p className="competing-team-name">{competingTeam}</p>
       <p className="result">{result}</p>
-      <p className={`match-status ${matchStatusClass}`}>{matchStatus}</p>
+      <p className={`match-status ${matchStatusClass()}`}>{matchStatus}</p>
     </li>
   )
 }
