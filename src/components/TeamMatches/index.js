@@ -1,11 +1,14 @@
 // Write your code here
 
 import {Component} from 'react'
+import {Link} from 'react-router-dom'
 import Loader from 'react-loader-spinner'
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 
 import LatestMatch from '../LatestMatch'
 import MatchCard from '../MatchCard'
+
+import PieChart from '../PieChart'
 
 import './index.css'
 
@@ -63,6 +66,21 @@ class TeamMatches extends Component {
     })
   }
 
+  getNoOfMatches = value => {
+    const {latestMatch, recentMatches} = this.state
+
+    const currentMatch = latestMatch.matchStatus === value ? 1 : 0
+    const result = recentMatches.filter(each => each.matchStatus === value)
+    const finalResult = result.length + currentMatch
+    return finalResult
+  }
+
+  generatePieChartData = () => [
+    {name: 'Won', value: this.getNoOfMatches('Won')},
+    {name: 'Lost', value: this.getNoOfMatches('Lost')},
+    {name: 'Drawn', value: this.getNoOfMatches('Drawn')},
+  ]
+
   renderLoader = () => (
     <div data-testid="loader" className="loader-container">
       <Loader type="Oval" color="#ffffff" height="50" />
@@ -76,11 +94,18 @@ class TeamMatches extends Component {
       <div className="team-matches-container">
         <img src={teamBanner} alt="team banner" className="team-banner" />
         <LatestMatch latestMatchDetails={latestMatch} key={latestMatch.id} />
+        <h1 className="latest-match-heading">Team Statistics</h1>
+        <PieChart data={this.generatePieChartData()} />
         <ul className="recent-matches-list">
           {recentMatches.map(eachMatch => (
             <MatchCard matchCardDetails={eachMatch} key={eachMatch.id} />
           ))}
         </ul>
+        <Link to="/">
+          <button type="button" className="back-button">
+            Back
+          </button>
+        </Link>
       </div>
     )
   }
